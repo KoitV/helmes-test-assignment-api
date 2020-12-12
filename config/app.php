@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -202,7 +203,7 @@ return [
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
-        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+//        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
@@ -227,6 +228,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'EntityManager' => \LaravelDoctrine\ORM\Facades\EntityManager::class,
+        'Registry' => \LaravelDoctrine\ORM\Facades\Registry::class,
+        'Doctrine' => \LaravelDoctrine\ORM\Facades\Doctrine::class
     ],
 
 ];
