@@ -108,6 +108,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'custom_types'               => [
+        \Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType::NAME => \Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType::class,
     ],
     /*
     |--------------------------------------------------------------------------
