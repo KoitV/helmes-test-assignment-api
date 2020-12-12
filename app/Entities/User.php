@@ -3,9 +3,11 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
+/** @ORM\Entity */
 class User
 {
     /**
@@ -30,6 +32,20 @@ class User
      * @ORM\Column(type="boolean")
      */
     private bool $hasAgreedToTerms;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Sector")
+     * @ORM\JoinTable(name="user_sector",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="sector_id", referencedColumnName="id")}
+     *     )
+     */
+    private ArrayCollection $sectors;
+
+    public function __construct()
+    {
+        $this->sectors = new ArrayCollection();
+    }
 
     public function getId(): UuidInterface
     {
