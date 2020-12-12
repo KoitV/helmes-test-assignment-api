@@ -16,8 +16,20 @@ class User
      */
     private UuidInterface $id;
 
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $firstName;
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $lastName;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $hasAgreedToTerms;
 
     public function getId(): UuidInterface
     {
@@ -34,6 +46,11 @@ class User
         return $this->lastName;
     }
 
+    public function hasAgreedToTerms(): bool
+    {
+        return $this->hasAgreedToTerms;
+    }
+
     public function setFirstName(string $firstName)
     {
         $this->firstName = $firstName;
@@ -42,6 +59,11 @@ class User
     public function setLastName(string $lastName)
     {
         $this->lastName = $lastName;
+    }
+
+    public function agreeToTerms()
+    {
+        $this->hasAgreedToTerms = true;
     }
 
 }
