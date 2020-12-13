@@ -3,6 +3,7 @@
 
 namespace App\Entities;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +39,7 @@ class Sector
     /**
      * @ORM\OneToMany(targetEntity="Sector", mappedBy="parent")
      */
-    private ArrayCollection $children;
+    private Collection $children;
 
     public function __construct()
     {
