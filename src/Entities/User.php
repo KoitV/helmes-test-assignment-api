@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
@@ -19,21 +21,28 @@ class User
      * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     *
      */
     private UuidInterface $id;
 
     /**
      * @ORM\Column(type="string")
+     *
+     * @Groups({"create_user"})
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string")
+     *
+     * @Groups({"create_user"})
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="boolean")
+     *
+     * @Groups({"create_user"})
      */
     private bool $hasAgreedToTerms = false;
 
@@ -43,6 +52,8 @@ class User
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="sector_id", referencedColumnName="id")}
      *     )
+     *
+     * @Groups({"create_user"})
      */
     private Collection $sectors;
 
@@ -51,6 +62,11 @@ class User
         $this->sectors = new ArrayCollection();
     }
 
+    /**
+     * @return UuidInterface
+     *
+     * @Groups({"create_user"})
+     */
     public function getId(): UuidInterface
     {
         return $this->id;
@@ -66,6 +82,11 @@ class User
         return $this->lastName;
     }
 
+    public function getSectors(): Collection
+    {
+        return $this->sectors;
+    }
+
     public function hasAgreedToTerms(): bool
     {
         return $this->hasAgreedToTerms;
@@ -79,6 +100,11 @@ class User
     public function setLastName(string $lastName)
     {
         $this->lastName = $lastName;
+    }
+
+    public function addSector(Sector $sector)
+    {
+        $this->sectors->add($sector);
     }
 
     public function agreeToTerms()
