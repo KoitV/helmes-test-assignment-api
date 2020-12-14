@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
@@ -22,7 +23,9 @@ class UserController extends AbstractController
 
         $user = $createUserService->execute($createUserData);
 
-        $serializedContent = $serializer->serialize($user, 'json');
+        $serializedContent = $serializer->serialize($user, 'json', [
+            AbstractObjectNormalizer::GROUPS => ['create_user']
+        ]);
 
         return new Response(
             $serializedContent,
