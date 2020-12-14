@@ -14,7 +14,8 @@ class CreateUserDataFactory
         return new CreateUserData(
             firstName: $request->get('firstName'),
             lastName: $request->get('lastName'),
-            hasAgreedToTerms: $request->get('hasAgreedToTerms')
+            hasAgreedToTerms: $request->get('hasAgreedToTerms'),
+            sectorIds: $request->get('sectorIds')
         );
     }
 }

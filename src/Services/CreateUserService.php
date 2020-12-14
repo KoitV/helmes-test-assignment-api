@@ -5,20 +5,21 @@ namespace App\Services;
 
 
 use App\DTOs\CreateUserData;
+use App\Entities\Sector;
 use App\Entities\User;
 use App\Exceptions\UserHasNotAgreedToTermsException;
+use App\Repositories\Contracts\SectorRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
-use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Flex\PackageFilter;
 
 class CreateUserService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UserRepositoryContract $userRepository,
+        private SectorRepositoryContract $sectorRepository,
         private ValidatorInterface $validator
     )
     {}
@@ -36,6 +37,13 @@ class CreateUserService
             throw new UserHasNotAgreedToTermsException();
 
         $user = $this->userRepository->create($createUserData);
+
+        foreach($createUserData->sectorIds as $sectorId)
+        {
+            $sector = $this->entityManager->getRepository(Sector::class)->find($sectorId);
+            $user->addSector($sector);
+        }
+
 
         $this->entityManager->flush();
         return $user;
