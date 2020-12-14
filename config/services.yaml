@@ -34,3 +34,7 @@ services:
         class: App\EventListener\JsonRequestTransformerListener
         tags:
             - { name: "kernel.event_listener", event: "kernel.request", method: "onKernelRequest", priority: "100" }
+
+    uuid_normalizer:
+        class: App\Normalizers\UuidNormalizer
+        tags: [serializer.normalizer]
