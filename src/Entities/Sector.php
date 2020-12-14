@@ -22,14 +22,14 @@ class Sector
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
      *
-     * @Groups({"create_user", "all_sectors"})
+     * @Groups({"create_user", "update_user", "all_sectors"})
      */
     private UuidInterface $id;
 
     /**
      * @ORM\Column(type="string")
      *
-     * @Groups({"create_user", "all_sectors"})
+     * @Groups({"create_user", "update_user", "all_sectors"})
      */
     private string $name;
 

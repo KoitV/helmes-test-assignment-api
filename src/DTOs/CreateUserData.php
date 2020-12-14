@@ -5,8 +5,6 @@ namespace App\DTOs;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-
 class CreateUserData implements DtoInterface
 {
     public function __construct(
