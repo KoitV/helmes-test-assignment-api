@@ -31,13 +31,13 @@ class Sector
     /**
      * @ORM\Column(type="uuid_binary_ordered_time", nullable=true)
      */
-    private UuidInterface $parentId;
+    private ?UuidInterface $parentId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sector", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    private Sector $parent;
+    private ?Sector $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Sector", mappedBy="parent")
@@ -64,7 +64,7 @@ class Sector
         return $this->name;
     }
 
-    public function getParent(): Sector
+    public function getParent(): ?Sector
     {
         return $this->parent;
     }
@@ -72,6 +72,11 @@ class Sector
     public function getParentId(): ?UuidInterface
     {
         return $this->parentId;
+    }
+
+    public function getChildren(): Collection
+    {
+        return $this->children;
     }
 
     public function setName(string $name)
