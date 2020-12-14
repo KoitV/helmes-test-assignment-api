@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -20,16 +21,22 @@ class Sector
      * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+     *
+     * @Groups({"create_user", "all_sectors"})
      */
     private UuidInterface $id;
 
     /**
      * @ORM\Column(type="string")
+     *
+     * @Groups({"create_user", "all_sectors"})
      */
     private string $name;
 
     /**
      * @ORM\Column(type="uuid_binary_ordered_time", nullable=true)
+     *
+     * @Groups({"all_sectors"})
      */
     private ?UuidInterface $parentId;
 
@@ -41,6 +48,8 @@ class Sector
 
     /**
      * @ORM\OneToMany(targetEntity="Sector", mappedBy="parent")
+     *
+     * @Groups({"all_sectors"})
      */
     private Collection $children;
 
