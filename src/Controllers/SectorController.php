@@ -25,6 +25,7 @@ class SectorController extends AbstractController
             AbstractObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function($object, $format, $context){
                 return $object->getId();
             },
+            AbstractObjectNormalizer::GROUPS => ['all_sectors']
         ]);
 
         return new Response(
