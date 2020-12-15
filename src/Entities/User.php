@@ -28,21 +28,21 @@ class User
     /**
      * @ORM\Column(type="string")
      *
-     * @Groups({"create_user", "update_user"})
+     * @Groups({"create_user", "update_user", "get_user"})
      */
     private string $firstName;
 
     /**
      * @ORM\Column(type="string")
      *
-     * @Groups({"create_user", "update_user"})
+     * @Groups({"create_user", "update_user", "get_user"})
      */
     private string $lastName;
 
     /**
      * @ORM\Column(type="boolean")
      *
-     * @Groups({"create_user", "update_user"})
+     * @Groups({"create_user", "update_user", "get_user"})
      */
     private bool $hasAgreedToTerms = false;
 
@@ -53,7 +53,7 @@ class User
      *     inverseJoinColumns={@ORM\JoinColumn(name="sector_id", referencedColumnName="id")}
      *     )
      *
-     * @Groups({"create_user", "update_user"})
+     * @Groups({"create_user", "update_user", "get_user"})
      */
     private Collection $sectors;
 
@@ -65,7 +65,7 @@ class User
     /**
      * @return UuidInterface
      *
-     * @Groups({"create_user", "update_user"})
+     * @Groups({"create_user", "update_user", "get_user"})
      */
     public function getId(): UuidInterface
     {

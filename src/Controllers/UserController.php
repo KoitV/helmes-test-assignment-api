@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\DTOs\Factories\CreateUserDataFactory;
+use App\DTOs\Factories\GetUserDataFactory;
 use App\DTOs\Factories\UpdateUserDataFactory;
+use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\CreateUserService;
 use App\Services\UpdateUserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +25,37 @@ class UserController extends AbstractController
         private SerializerInterface $serializer,
     )
     {}
+
+    #[Route('/users/{id}', name: 'users.show', methods: ['GET'])]
+    public function show(
+        UserRepositoryContract $userRepository,
+        Request $request
+    ): Response {
+        $getUserData = GetUserDataFactory::fromRequest($request);
+
+        $violations = $this->validator->validate($getUserData);
+
+        if($violations->count() > 0)
+        {
+            return new Response(
+                $this->serializer->serialize($violations, $this->format),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        $user = $userRepository->get($getUserData);
+
+        $serializedContent = $this->serializer->serialize($user, $this->format, [
+            AbstractObjectNormalizer::GROUPS => ['get_user']
+        ]);
+
+        return new Response(
+            $serializedContent,
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
 
     #[Route('/users', name: 'users.store', methods: ['POST'])]
     public function store(
@@ -59,8 +92,7 @@ class UserController extends AbstractController
     public function update(
         Request $request,
         UpdateUserService $updateUserService
-    )
-    {
+    ): Response {
         $updateUserData = UpdateUserDataFactory::fromRequest($request);
 
         $violations = $this->validator->validate($updateUserData);

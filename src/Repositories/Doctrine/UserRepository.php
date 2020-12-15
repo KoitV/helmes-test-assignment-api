@@ -5,10 +5,13 @@ namespace App\Repositories\Doctrine;
 
 
 use App\DTOs\CreateUserData;
+use App\DTOs\GetUserData;
 use App\DTOs\UpdateUserData;
 use App\Entities\User;
 use App\Repositories\Contracts\UserRepositoryContract;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Parameter;
 
 class UserRepository implements UserRepositoryContract
 {
@@ -50,5 +53,16 @@ class UserRepository implements UserRepositoryContract
         $this->entityManager->persist($user);
 
         return $user;
+    }
+
+    public function get(GetUserData $getUserData): User
+    {
+        $query = $this->entityManager->createQuery('SELECT user, sector FROM App\Entities\User JOIN user.sectors sector WHERE user.id = :id');
+
+        $query->setParameters(new ArrayCollection([
+            new Parameter('id', $getUserData->id, 'uuid_binary_ordered_time')
+        ]));
+
+        return $this->entityManager->getRepository(User::class)->find($getUserData->id);
     }
 }
