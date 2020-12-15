@@ -35,7 +35,12 @@ class UpdateUserData implements DtoInterface
          *     minMessage = "You must select at least one sector."
          * )
          */
-        public ?array $sectorIds
+        public ?array $sectorIds,
+
+        /**
+         * @Assert\Uuid
+         */
+        public ?UuidInterface $authenticatedUserId = null
     )
     {}
 }

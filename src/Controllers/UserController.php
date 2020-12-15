@@ -8,6 +8,8 @@ use App\DTOs\Factories\UpdateUserDataFactory;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\CreateUserService;
 use App\Services\UpdateUserService;
+use Firebase\JWT\JWT;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +25,7 @@ class UserController extends AbstractController
     public function __construct(
         private ValidatorInterface $validator,
         private SerializerInterface $serializer,
+        private $appSecret
     )
     {}
 
@@ -77,6 +80,10 @@ class UserController extends AbstractController
 
         $user = $createUserService->execute($createUserData);
 
+        $payload = ['userId' => $user->getId()->toString()];
+
+        $jwt = JWT::encode($payload, $this->appSecret);
+
         $serializedContent = $this->serializer->serialize($user, $this->format, [
             AbstractObjectNormalizer::GROUPS => ['create_user']
         ]);
@@ -84,7 +91,10 @@ class UserController extends AbstractController
         return new Response(
             $serializedContent,
             Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
+            [
+                'Content-Type' => 'application/json',
+                'Authorization' => sprintf('Bearer %s', $jwt)
+            ]
         );
     }
 
@@ -94,6 +104,16 @@ class UserController extends AbstractController
         UpdateUserService $updateUserService
     ): Response {
         $updateUserData = UpdateUserDataFactory::fromRequest($request);
+
+        if($request->headers->has('Authorization'))
+        {
+            $authorizationHeader = $request->headers->get('Authorization');
+            $jwtString = str_replace('Bearer ', '', $authorizationHeader);
+
+            $jwt = JWT::decode($jwtString, $this->appSecret, ['HS256']);
+
+            $updateUserData->authenticatedUserId = Uuid::getFactory()->fromString($jwt->userId);
+        }
 
         $violations = $this->validator->validate($updateUserData);
 

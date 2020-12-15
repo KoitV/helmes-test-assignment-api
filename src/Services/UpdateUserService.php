@@ -10,6 +10,7 @@ use App\Exceptions\UserHasNotAgreedToTermsException;
 use App\Repositories\Contracts\SectorRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class UpdateUserService
 {
@@ -22,6 +23,9 @@ class UpdateUserService
 
     public function execute(UpdateUserData $updateUserData)
     {
+        if($updateUserData->authenticatedUserId === null || $updateUserData->authenticatedUserId->toString() !== $updateUserData->id->toString())
+            throw new AccessDeniedHttpException('You don\'t have permission to edit this user.');
+
         if($updateUserData->hasAgreedToTerms !== null && !$updateUserData->hasAgreedToTerms)
             throw new UserHasNotAgreedToTermsException();
 

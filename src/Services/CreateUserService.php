@@ -10,6 +10,7 @@ use App\Exceptions\UserHasNotAgreedToTermsException;
 use App\Repositories\Contracts\SectorRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserService
@@ -18,7 +19,8 @@ class CreateUserService
         private EntityManagerInterface $entityManager,
         private UserRepositoryContract $userRepository,
         private SectorRepositoryContract $sectorRepository,
-        private ValidatorInterface $validator
+        private ValidatorInterface $validator,
+        private SessionInterface $session
     )
     {}
 
